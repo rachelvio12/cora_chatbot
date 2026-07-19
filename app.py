@@ -3,12 +3,16 @@ import time
 import re
 import html
 from datetime import datetime
+from zoneinfo import ZoneInfo
 from similarity import CoretaxChatbot
 
+# ============================================================
+# KONFIGURASI
+# ============================================================
 DATASET_PATH = "data/dataset_csv.xlsx"
 THRESHOLD = 0.50
 BOT_NAME = "Cora"
-LOGO_PATH = "assets/logo_djp.png"
+LOGO_PATH = "assets/logo_djp.png"   # logo institusi Coretax — dipakai untuk branding (sidebar), BUKAN avatar chat
 SUGGESTED_QUESTIONS = [
     "Cara login Coretax kalau lupa password",
     "Cara bikin kode billing pajak",
@@ -23,8 +27,11 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
+# ============================================================
+# FUNGSI-FUNGSI
+# ============================================================
 def get_greeting() -> str:
-    hour = datetime.now().hour
+    hour = datetime.now(ZoneInfo("Asia/Jakarta")).hour
     if 4 <= hour < 11: return "Selamat pagi"
     if 11 <= hour < 15: return "Selamat siang"
     if 15 <= hour < 19: return "Selamat sore"
@@ -49,6 +56,7 @@ def maybe_update_title(session_id, first_message):
         sess["title"] = title
 
 def linkify_html(text: str) -> str:
+    """Escape teks lalu ubah domain/URL jadi <a> yang bisa diklik (aman dari HTML injection)."""
     escaped = html.escape(text)
     url_pattern = r'(https?://[^\s\)]+|(?:www\.)?[a-zA-Z0-9-]+\.(?:go\.id|pajak\.go\.id|co\.id|com)(?:/[^\s]*)?)'
 
@@ -59,6 +67,7 @@ def linkify_html(text: str) -> str:
 
     return re.sub(url_pattern, _wrap, escaped)
 
+# ---- Bubble chat custom (kanan = user, kiri = Cora) ----
 def user_bubble_html(text: str) -> str:
     return f"""
     <div style="display:flex; justify-content:flex-end; margin:6px 0;">
@@ -87,7 +96,8 @@ TYPING_DOTS_HTML = """
 """
 
 def stream_bot_answer(placeholder, answer_html: str, delay: float = 0.015):
-    words = re.split(r"(\s+)", answer_html)
+    """Stream jawaban Cora kata demi kata di dalam bubble kiri."""
+    words = re.split(r"(\s+)", answer_html)  # simpan spasi biar aman
     buffer = ""
     for w in words:
         buffer += w
@@ -99,29 +109,29 @@ def stream_bot_answer(placeholder, answer_html: str, delay: float = 0.015):
 def load_bot():
     return CoretaxChatbot(dataset_path=DATASET_PATH, threshold=THRESHOLD)
 
+@st.cache_data
+def get_logo_base64(path):
+    import base64, os
+    if not os.path.exists(path):
+        return None
+    with open(path, "rb") as f:
+        return base64.b64encode(f.read()).decode()
+
 bot = None
 with st.spinner("Menyiapkan Cora... (proses pertama kali bisa memakan waktu 1-3 menit, mohon jangan ditutup)"):
     bot = load_bot()
 if "sessions" not in st.session_state: st.session_state.sessions = {}
 if "active_session" not in st.session_state: st.session_state.active_session = None
 
+# ============================================================
+# CSS CUSTOM
+# ============================================================
 st.markdown("""
 <style>
-/* --- KODE PAMUNGKAS HILANGIN HEADER & FOOTER --- */
-#MainMenu {visibility: hidden;}
-header {visibility: hidden;}
-footer {display: none !important;}
-div[data-testid="stDecoration"] {display: none;}
-
-/* Menghilangkan paksa elemen iframe/badge di paling bawah */
-iframe[title="Streamlit app status"] {display: none !important;}
-div[class*="viewerBadge"] {display: none !important;}
-span[class*="viewerBadge"] {display: none !important;}
-[data-testid="embedBadge"] {display: none !important;}
-
 .stApp {
     background: linear-gradient(180deg, #F5F3FF 0%, #F7F9FC 100%);
 }
+
 .hero-wrap {
     padding: 60px 20px 30px 20px;
     text-align: center;
@@ -144,10 +154,12 @@ span[class*="viewerBadge"] {display: none !important;}
     -webkit-text-fill-color: transparent;
 }
 .hero-wrap p { color: #6B7280; font-size: 14px; }
+
 section[data-testid="stSidebar"] {
     background-color: #FFFFFF;
     border-right: 1px solid #EDE9FE;
 }
+
 .typing-bubble {
     display: inline-flex;
     align-items: center;
@@ -169,6 +181,9 @@ section[data-testid="stSidebar"] {
 </style>
 """, unsafe_allow_html=True)
 
+# ============================================================
+# SIDEBAR
+# ============================================================
 with st.sidebar:
     logo_col, name_col = st.columns([1, 3])
     with logo_col:
@@ -198,7 +213,11 @@ with st.sidebar:
                 st.session_state.active_session = sid
                 st.rerun()
 
+# ============================================================
+# MAIN CHAT
+# ============================================================
 messages = get_active_messages()
+clicked_question = None
 
 if len(messages) == 0:
     st.markdown(f"""
@@ -213,17 +232,18 @@ if len(messages) == 0:
     for i, q in enumerate(SUGGESTED_QUESTIONS):
         with cols[i % 2]:
             if st.button(q, key=f"chip_{i}", use_container_width=True):
-                st.session_state.pending_question = q
-                st.rerun()
+                clicked_question = q
 
+# Tampilkan riwayat — user KANAN, Cora KIRI, tanpa avatar
 for msg in messages:
     if msg["role"] == "user":
         st.markdown(user_bubble_html(msg["content"]), unsafe_allow_html=True)
     else:
         st.markdown(bot_bubble_html(msg["content"]), unsafe_allow_html=True)
 
+# Input Chat — bisa dari kotak ketik ATAU klik chip saran
 typed_input = st.chat_input("Tulis pertanyaan kamu di sini...")
-user_input = st.session_state.pop("pending_question", None) or typed_input
+user_input = clicked_question or typed_input
 
 if user_input:
     messages.append({"role": "user", "content": user_input})
@@ -245,4 +265,5 @@ if user_input:
 
     stream_bot_answer(placeholder, answer_html)
 
+    # Simpan versi final (tanpa cursor ▌) ke riwayat — pakai teks asli hasil linkify
     messages.append({"role": "assistant", "content": answer_html})
