@@ -228,11 +228,14 @@ if len(messages) == 0:
         </div>
     """, unsafe_allow_html=True)
 
-    cols = st.columns(2)
-    for i, q in enumerate(SUGGESTED_QUESTIONS):
-        with cols[i % 2]:
-            if st.button(q, key=f"chip_{i}", use_container_width=True):
-                clicked_question = q
+# Chip saran pertanyaan — SELALU muncul (baik percakapan kosong atau sudah ada isi)
+st.caption("Coba tanyakan salah satu di bawah ini:")
+cols = st.columns(2)
+for i, q in enumerate(SUGGESTED_QUESTIONS):
+    with cols[i % 2]:
+        if st.button(q, key=f"chip_{i}", use_container_width=True):
+            clicked_question = q
+st.markdown("<div style='margin-bottom: 16px'></div>", unsafe_allow_html=True)
 
 # Tampilkan riwayat — user KANAN, Cora KIRI, tanpa avatar
 for msg in messages:
