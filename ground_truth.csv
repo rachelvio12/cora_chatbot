@@ -1,0 +1,78 @@
+pertanyaan_uji,kategori_benar,kata_kunci_jawaban,in_scope
+"mau login coretax tapi lupa passwordnya gimana","Aktivasi & Akun","Lupa Kata Sandi",1
+"situs resmi coretax alamatnya apa","Aktivasi & Akun","coretaxdjp.pajak.go.id",1
+"gak bisa masuk akun coretax kenapa ya","Aktivasi & Akun","NIK/NPWP dan password sudah benar",1
+"password djp online sama coretax itu sama ga sih","Aktivasi & Akun","Password awal Coretax sama dengan DJP Online",1
+"passphrase di coretax fungsinya buat apa","Aktivasi & Akun","tanda tangan digital",1
+"belum pernah bikin akun djp online, bisa daftar coretax langsung ga","Aktivasi & Akun","Daftar di Sini",1
+"kode otorisasi djp itu maksudnya apa ya","Aktivasi & Akun","tanda tangan elektronik resmi",1
+"langkah aktivasi akun coretax dari awal gimana","Aktivasi & Akun","Aktivasi Akun Wajib Pajak",1
+"pengen bikin npwp lewat coretax caranya gimana","NPWP & Registrasi","Daftar di Sini",1
+"pemadanan nik sama npwp itu maksudnya apa","NPWP & Registrasi","mengintegrasikan NIK",1
+"npwp aku udah nyambung ke nik apa belum ya, cek dimana","NPWP & Registrasi","Informasi Umum",1
+"cara ubah nik jadi npwp itu lewat mana","NPWP & Registrasi","registrasi",1
+"daftar npwp online tanpa ke kantor pajak bisa ga","NPWP & Registrasi","coretaxdjp.pajak.go.id",1
+"syarat bikin npwp buat badan usaha di kpp apa aja","NPWP & Registrasi","akta pendirian badan",1
+"npwp pribadi aku statusnya non efektif, ngaruh ga ke npwp pt","NPWP & Registrasi","Non-Efektif",1
+"npwp cv aku tanggal pengesahannya gak valid, gimana solusinya","NPWP & Registrasi","tanggal pengesahan",1
+"lapor pajak tahunan pakai coretax caranya","Pelaporan SPT","Surat Pemberitahuan",1
+"spt tahun 2024 lapornya dimana ya, masih di djp online apa udah coretax","Pelaporan SPT","djponline.pajak.go.id",1
+"spt masa itu apaan sih di coretax","Pelaporan SPT","SPT Masa",1
+"batas waktu lapor spt tahunan orang pribadi sampai kapan","Pelaporan SPT","bulan Maret",1
+"deadline spt tahunan buat perusahaan kapan ya","Pelaporan SPT","bulan April",1
+"tahun periode badan usaha kok gak muncul di coretax","Pelaporan SPT","logout",1
+"udah lapor spt tapi hasilnya kurang bayar, harus ngapain","Pelaporan SPT","kode billing",1
+"gagal terus pas mau posting laporan spt, kenapa ya","Pelaporan SPT","cache browser",1
+"cara bikin kode billing buat bayar pajak","Pembayaran Pajak","Kode Billing",1
+"pembayaran pajak tahun lalu (2024) itu lewat mana","Pembayaran Pajak","DJP Online",1
+"kode billing itu sebenernya buat apa sih","Pembayaran Pajak","kode unik untuk pembayaran",1
+"duit pajak udah aku transfer tapi belum kevalidasi, gimana","Pembayaran Pajak","hubungi KPP",1
+"syarat buat restitusi kelebihan bayar pajak apa aja","Pembayaran Pajak","SPT lebih bayar",1
+"omzet ppn beda sama bukti potong pph final umkm, wajib bayar selisihnya ga","Pembayaran Pajak","direkonsiliasi",1
+"nomor surat permohonan restitusi diisi apa ya","Pembayaran Pajak","nomor yang kamu buat sendiri",1
+"dokumen buat ngurus skb warisan apa aja yang perlu disiapin","SKB & Waris","akta kematian pewaris",1
+"pewaris meninggal tanpa surat wasiat, solusinya gimana","SKB & Waris","surat keterangan waris",1
+"formulir skb warisan itu udah disediain kpp apa belum","SKB & Waris","formulir permohonan SKB",1
+"hibah sama warisan itu sama aja ga secara aturan","SKB & Waris","Tidak sama",1
+"mau urus skb hibah ke tempat ibadah, harus ke kpp dulu buat bikin akun coretax ga","SKB & Waris","mandiri",1
+"proses pengurusan skb waris makan waktu berapa lama","SKB & Waris","10 hari kerja",1
+"skb bisa dikirim online apa harus ambil langsung","SKB & Waris","secara elektronik",1
+"sppkp dikirim ke email apa harus ambil sendiri","PKP & PPN","dikirim melalui email",1
+"masih ada tunggakan pajak yang udah ikut psa, bisa ajukan pencabutan pkp ga","PKP & PPN","pencabutan PKP",1
+"syarat pengajuan pkp buat badan usaha apa aja","PKP & PPN","NPWP badan",1
+"kenapa ya pengajuan pkp aku ditolak terus","PKP & PPN","dokumen tempat usaha tidak lengkap",1
+"usaha bidang apa aja yang boleh ajukan pkp","PKP & PPN","omzet melebihi",1
+"pkp pengusaha kena pajak itu pengertiannya apa","PKP & PPN","Pengusaha Kena Pajak",1
+"omzet berapa baru wajib jadi pkp","PKP & PPN","Rp4,8 miliar",1
+"cara update data diri di akun coretax","Profil & Data","Informasi Umum",1
+"dimana ya cek notifikasi masuk di coretax","Profil & Data","Notifikasi Saya",1
+"menu portal saya di coretax isinya apa aja","Profil & Data","Dokumen Saya",1
+"ganti kata sandi coretax lewat menu mana","Profil & Data","Manajemen Akses",1
+"cara nambahin kuasa atau wakil di akun coretax gimana","Profil & Data","Pihak Terkait",1
+"pic lama udah gak aktif, cara gantinya gimana","Profil & Data","nonaktifkan PIC lama",1
+"gak bisa nambahin nomor rekening di coretax, kenapa ya","Profil & Data","permintaan sebelumnya selesai",1
+"nambah pic itu dilakuin dari akun direktur apa akun badan","Profil & Data","akun WP Badan",1
+"dasar hukum sanksi pajak di coretax apa","Sanksi & Hukum","UU KUP",1
+"telat lapor spt tahunan pribadi kena denda berapa","Sanksi & Hukum","Rp100.000",1
+"kalau badan usaha telat lapor spt tahunan dendanya berapa","Sanksi & Hukum","Rp1.000.000",1
+"telat bayar pajak di coretax sanksinya gimana","Sanksi & Hukum","sanksi bunga",1
+"pas transisi ke coretax, sanksi administratif dihapus ga","Sanksi & Hukum","KEP-67/PJ/2025",1
+"cara bayar denda pajak di coretax gimana","Sanksi & Hukum","Surat Tagihan Pajak",1
+"bisa ga sih ajukan pengurangan sanksi pajak online","Sanksi & Hukum","Pengurangan/Penghapusan Sanksi",1
+"coretax itu sistem buat apa sih","Lainnya","End-to-End",1
+"kalau ada masalah di coretax harus hubungi siapa","Lainnya","Kring Pajak",1
+"bisa ga urus pajak ke kantor djp yang beda sama kpp terdaftar","Lainnya","konsultasi umum",1
+"id tku di coretax maksudnya apa","Lainnya","Tempat Kegiatan Usaha",1
+"browser apa yang paling cocok buat buka coretax","Lainnya","Google Chrome",1
+"tombol submit di coretax kok gak bisa diklik ya","Lainnya","kolom wajib",1
+"sesi login coretax timeout-nya berapa lama","Lainnya","30-60 menit",1
+"kucing saya ilang gimana ya","Tidak Relevan","TIDAK_DITEMUKAN",0
+"resep nasi goreng enak dong","Tidak Relevan","TIDAK_DITEMUKAN",0
+"cuaca hari ini di jakarta gimana","Tidak Relevan","TIDAK_DITEMUKAN",0
+"rekomendasi film bagus dong","Tidak Relevan","TIDAK_DITEMUKAN",0
+"harga bitcoin sekarang berapa","Tidak Relevan","TIDAK_DITEMUKAN",0
+"siapa presiden indonesia sekarang","Tidak Relevan","TIDAK_DITEMUKAN",0
+"cara masak rendang yang enak gimana","Tidak Relevan","TIDAK_DITEMUKAN",0
+"lagu terbaru yang lagi hits apa","Tidak Relevan","TIDAK_DITEMUKAN",0
+"jarak jakarta ke bandung berapa km","Tidak Relevan","TIDAK_DITEMUKAN",0
+"apa itu jodoh menurut kamu","Tidak Relevan","TIDAK_DITEMUKAN",0
