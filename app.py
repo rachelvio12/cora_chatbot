@@ -107,6 +107,14 @@ if "active_session" not in st.session_state: st.session_state.active_session = N
 
 st.markdown("""
 <style>
+/* --- KODE BARU UNTUK HILANGIN HEADER & FOOTER STREAMLIT --- */
+#MainMenu {visibility: hidden;}
+header {visibility: hidden;}
+footer {visibility: hidden;}
+div[data-testid="stDecoration"] {display: none;}
+.viewerBadge_container__1QS13, [data-testid="embedBadge"] {display: none !important;}
+/* -------------------------------------------------------- */
+
 .stApp {
     background: linear-gradient(180deg, #F5F3FF 0%, #F7F9FC 100%);
 }
