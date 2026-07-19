@@ -107,13 +107,16 @@ if "active_session" not in st.session_state: st.session_state.active_session = N
 
 st.markdown("""
 <style>
-/* --- KODE UPDATE HILANGIN HEADER & FOOTER MOBILE/EMBED --- */
+/* --- KODE PAMUNGKAS HILANGIN HEADER & FOOTER --- */
 #MainMenu {visibility: hidden;}
 header {visibility: hidden;}
 footer {display: none !important;}
 div[data-testid="stDecoration"] {display: none;}
-div[class^="viewerBadge"] {display: none !important;}
-span[class^="viewerBadge"] {display: none !important;}
+
+/* Menghilangkan paksa elemen iframe/badge di paling bawah */
+iframe[title="Streamlit app status"] {display: none !important;}
+div[class*="viewerBadge"] {display: none !important;}
+span[class*="viewerBadge"] {display: none !important;}
 [data-testid="embedBadge"] {display: none !important;}
 
 .stApp {
