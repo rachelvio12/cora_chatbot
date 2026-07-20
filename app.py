@@ -6,13 +6,10 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 from similarity import CoretaxChatbot
 
-# ============================================================
-# KONFIGURASI
-# ============================================================
 DATASET_PATH = "data/dataset_csv.xlsx"
 THRESHOLD = 0.50
 BOT_NAME = "Cora"
-LOGO_PATH = "assets/logo_djp.png"   # logo institusi Coretax — dipakai untuk branding (sidebar), BUKAN avatar chat
+LOGO_PATH = "assets/logo_djp.png"
 SUGGESTED_QUESTIONS = [
     "Cara login Coretax kalau lupa password",
     "Cara bikin kode billing pajak",
@@ -27,9 +24,6 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# ============================================================
-# FUNGSI-FUNGSI
-# ============================================================
 def get_greeting() -> str:
     hour = datetime.now(ZoneInfo("Asia/Jakarta")).hour
     if 4 <= hour < 11: return "Selamat pagi"
@@ -56,7 +50,6 @@ def maybe_update_title(session_id, first_message):
         sess["title"] = title
 
 def linkify_html(text: str) -> str:
-    """Escape teks lalu ubah domain/URL jadi <a> yang bisa diklik (aman dari HTML injection)."""
     escaped = html.escape(text)
     url_pattern = r'(https?://[^\s\)]+|(?:www\.)?[a-zA-Z0-9-]+\.(?:go\.id|pajak\.go\.id|co\.id|com)(?:/[^\s]*)?)'
 
@@ -67,7 +60,6 @@ def linkify_html(text: str) -> str:
 
     return re.sub(url_pattern, _wrap, escaped)
 
-# ---- Bubble chat custom (kanan = user, kiri = Cora) ----
 def user_bubble_html(text: str) -> str:
     return f"""
     <div style="display:flex; justify-content:flex-end; margin:6px 0;">
@@ -91,31 +83,21 @@ def bot_bubble_html(inner_html: str) -> str:
     </div>
     """
 
-TYPING_DOTS_HTML = """
-<div class="typing-bubble"><span></span><span></span><span></span></div>
-"""
-
-def stream_bot_answer(placeholder, answer_html: str, delay: float = 0.015):
-    """Stream jawaban Cora kata demi kata di dalam bubble kiri."""
-    words = re.split(r"(\s+)", answer_html)  # simpan spasi biar aman
+def stream_bot_answer(placeholder, raw_answer: str, delay: float = 0.02):
+    escaped = html.escape(raw_answer)
+    words = re.split(r"(\s+)", escaped)
     buffer = ""
     for w in words:
         buffer += w
         placeholder.markdown(bot_bubble_html(buffer + " ▌"), unsafe_allow_html=True)
         time.sleep(delay)
-    placeholder.markdown(bot_bubble_html(buffer), unsafe_allow_html=True)
+    final_html = linkify_html(raw_answer)
+    placeholder.markdown(bot_bubble_html(final_html), unsafe_allow_html=True)
+    return final_html
 
 @st.cache_resource
 def load_bot():
     return CoretaxChatbot(dataset_path=DATASET_PATH, threshold=THRESHOLD)
-
-@st.cache_data
-def get_logo_base64(path):
-    import base64, os
-    if not os.path.exists(path):
-        return None
-    with open(path, "rb") as f:
-        return base64.b64encode(f.read()).decode()
 
 bot = None
 with st.spinner("Menyiapkan Cora... (proses pertama kali bisa memakan waktu 1-3 menit, mohon jangan ditutup)"):
@@ -123,15 +105,11 @@ with st.spinner("Menyiapkan Cora... (proses pertama kali bisa memakan waktu 1-3 
 if "sessions" not in st.session_state: st.session_state.sessions = {}
 if "active_session" not in st.session_state: st.session_state.active_session = None
 
-# ============================================================
-# CSS CUSTOM
-# ============================================================
 st.markdown("""
 <style>
 .stApp {
     background: linear-gradient(180deg, #F5F3FF 0%, #F7F9FC 100%);
 }
-
 .hero-wrap {
     padding: 60px 20px 30px 20px;
     text-align: center;
@@ -154,36 +132,13 @@ st.markdown("""
     -webkit-text-fill-color: transparent;
 }
 .hero-wrap p { color: #6B7280; font-size: 14px; }
-
 section[data-testid="stSidebar"] {
     background-color: #FFFFFF;
     border-right: 1px solid #EDE9FE;
 }
-
-.typing-bubble {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 2px 0;
-}
-.typing-bubble span {
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    background: #A78BFA;
-    animation: typing-bounce 1.1s infinite ease-in-out;
-}
-.typing-bubble span:nth-child(2) { animation-delay: 0.15s; }
-.typing-bubble span:nth-child(3) { animation-delay: 0.3s; }
-@keyframes typing-bounce {
-    0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
-    30% { transform: translateY(-6px); opacity: 1; }
-}
 </style>
 """, unsafe_allow_html=True)
 
-# ============================================================
-# SIDEBAR
-# ============================================================
 with st.sidebar:
     logo_col, name_col = st.columns([1, 3])
     with logo_col:
@@ -213,9 +168,6 @@ with st.sidebar:
                 st.session_state.active_session = sid
                 st.rerun()
 
-# ============================================================
-# MAIN CHAT
-# ============================================================
 messages = get_active_messages()
 clicked_question = None
 
@@ -228,7 +180,6 @@ if len(messages) == 0:
         </div>
     """, unsafe_allow_html=True)
 
-# Chip saran pertanyaan — SELALU muncul (baik percakapan kosong atau sudah ada isi)
 st.caption("Coba tanyakan salah satu di bawah ini:")
 cols = st.columns(2)
 for i, q in enumerate(SUGGESTED_QUESTIONS):
@@ -237,14 +188,12 @@ for i, q in enumerate(SUGGESTED_QUESTIONS):
             clicked_question = q
 st.markdown("<div style='margin-bottom: 16px'></div>", unsafe_allow_html=True)
 
-# Tampilkan riwayat — user KANAN, Cora KIRI, tanpa avatar
 for msg in messages:
     if msg["role"] == "user":
         st.markdown(user_bubble_html(msg["content"]), unsafe_allow_html=True)
     else:
         st.markdown(bot_bubble_html(msg["content"]), unsafe_allow_html=True)
 
-# Input Chat — bisa dari kotak ketik ATAU klik chip saran
 typed_input = st.chat_input("Tulis pertanyaan kamu di sini...")
 user_input = clicked_question or typed_input
 
@@ -255,18 +204,14 @@ if user_input:
     st.markdown(user_bubble_html(user_input), unsafe_allow_html=True)
 
     placeholder = st.empty()
-    placeholder.markdown(bot_bubble_html(TYPING_DOTS_HTML), unsafe_allow_html=True)
-    time.sleep(0.6)
+    with st.spinner("Cora sedang mengetik..."):
+        time.sleep(0.4)
+        try:
+            hasil = bot.get_response(user_input)
+            raw_answer = hasil["answer"]
+        except Exception:
+            raw_answer = "Maaf, terjadi kendala saat mencari jawaban. Coba tanyakan ulang dengan kalimat lain, ya."
 
-    try:
-        hasil = bot.get_response(user_input)
-        answer_html = linkify_html(hasil["answer"])
-    except Exception:
-        answer_html = html.escape(
-            "Maaf, terjadi kendala saat mencari jawaban. Coba tanyakan ulang dengan kalimat lain, ya."
-        )
+    final_html = stream_bot_answer(placeholder, raw_answer)
 
-    stream_bot_answer(placeholder, answer_html)
-
-    # Simpan versi final (tanpa cursor ▌) ke riwayat — pakai teks asli hasil linkify
-    messages.append({"role": "assistant", "content": answer_html})
+    messages.append({"role": "assistant", "content": final_html})
